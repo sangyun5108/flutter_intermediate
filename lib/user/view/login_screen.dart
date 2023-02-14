@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_intermediate/common/const/colors.dart';
 import 'package:flutter_intermediate/common/const/data.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../common/layout/default_layout.dart';
 import '../../common/view/root_tab.dart';
 import '../../component/custom_text_form_field.dart';
@@ -119,8 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                     );
-
-                    print('새로 발급 받은 accessToken : ${res.data}');
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,
