@@ -8,7 +8,7 @@ class RestaurantCard extends StatelessWidget {
   final int ratingsCount;
   final int deliveryTime;
   final int deliveryFee;
-  final double rating;
+  final double ratings;
 
   const RestaurantCard(
       {Key? key,
@@ -18,7 +18,7 @@ class RestaurantCard extends StatelessWidget {
       required this.ratingsCount,
       required this.deliveryTime,
       required this.deliveryFee,
-      required this.rating})
+      required this.ratings})
       : super(key: key);
 
   @override
@@ -55,7 +55,7 @@ class RestaurantCard extends StatelessWidget {
               children: [
                 _IconText(
                   icon: Icons.star,
-                  label: rating.toString(),
+                  label: ratings.toString(),
                 ),
                 _IconText(
                   icon: Icons.receipt,
@@ -87,8 +87,6 @@ class _IconText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    print(icon.codePoint);
 
     return Row(
       children: [

@@ -30,15 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final String ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
-    String refreshToken = '';
-
     return DefaultLayout(
       backgroundColor: null,
-      child: SingleChildScrollView(
-        keyboardDismissBehavior:
-            ScrollViewKeyboardDismissBehavior.onDrag, // 드래그 했을때, 키보드 내리기
-        child: SafeArea(
-          top: true, // SafeArea 위쪽에만 적용
+      child: SafeArea(
+        top: true,
+        child: SingleChildScrollView(
+          keyboardDismissBehavior:
+              ScrollViewKeyboardDismissBehavior.onDrag, // 드래그 했을때, 키보드 내리기
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
@@ -110,14 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   // 회원가입 글자 버튼
                   onPressed: () async {
-                    final res = await dio.post(
-                      'http://$ip/auth/token',
-                      options: Options(
-                        headers: {
-                          'authorization': 'Bearer $refreshToken',
-                        },
-                      ),
-                    );
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,

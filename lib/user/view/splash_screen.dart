@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_intermediate/user/view/login_screen.dart';
 import '../../common/const/colors.dart';
@@ -25,17 +28,42 @@ class _SplashScreenState extends State<SplashScreen> {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
+    String rawString = 'test@codefactory.ai:testtest'; // :은 까먹으면 안된다.
 
-    if (refreshToken == null || accessToken == null) { // 둘중 하나가 null인 경우
+    // base64 인코딩
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    String token = stringToBase64.encode(rawString);
+
+    final dio = Dio();
+
+    try {
+      final res = await dio.post(
+        'http://$ip/auth/token',
+        options: Options(
+            headers:{
+              'authorization': 'Bearer $refreshToken'
+            }
+        ),
+      );
+
+      final newRefreshToken = res.data['refreshToken'];
+      final newAccessToken = res.data['accessToken'];
+
+      // token 갱신
+      await storage.write(key: REFRESH_TOKEN_KEY, value: newRefreshToken);
+      await storage.write(key: ACCESS_TOKEN_KEY, value: newAccessToken);
+
+      // refresh 토큰이 만료되지 않은 경우
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const RootTap()), // RootTap으로 이동
+              (route) => false,);
+
+    } catch(error){ // refresh 토큰이 만료된경우 에러 발생
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const LoginScreen()), // login Screen으로 이동
-          (route) => false);
-    } else { // 둘다 null이 아닌 경우
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const RootTap()), // RootTap으로 이동
-        (route) => false,
-      );
+              (route) => false);
     }
+
   }
 
   @override
