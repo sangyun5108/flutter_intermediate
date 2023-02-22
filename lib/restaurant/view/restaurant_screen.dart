@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_intermediate/restaurant/component/restaurant_card.dart';
+import 'package:flutter_intermediate/restaurant/model/restaurant_model.dart';
+import 'package:flutter_intermediate/restaurant/view/restaurant_detail_screen.dart';
 
 import '../../common/const/data.dart';
 
@@ -35,28 +37,20 @@ class RestaurantScreen extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                   if (!snapshot.hasData) {
                     // 데이터가 없는 경우 Container()를 보여준다
-                    return Container();
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
-
-                  print(snapshot.data);
 
                   return ListView.separated(
                       itemBuilder: (_, index) {
-
                         final item = snapshot.data![index];
+                        // parsed
+                        final pItem = RestaurantModel.fromJson(item);
 
-                        return RestaurantCard(
-                          image: Image.network(
-                            'http://$ip${item['thumbUrl']}',
-                            fit: BoxFit.cover,
-                          ),
-                          name: item['name'],
-                          tags: List<String>.from(item['tags']),
-                          ratingsCount: item['ratingsCount'],
-                          deliveryTime: item['deliveryTime'],
-                          deliveryFee: item['deliveryFee'],
-                          ratings: item['ratings'],
-                        );
+                        return GestureDetector(onTap:(){
+                         Navigator.of(context).push(MaterialPageRoute(builder: (_)=> RestaurantDetailScreen(title: pItem.name,id: pItem.id,)));
+                        },child: RestaurantCard.fromModel(model: pItem,));
                       },
                       separatorBuilder: (_, index) {
                         return const SizedBox(

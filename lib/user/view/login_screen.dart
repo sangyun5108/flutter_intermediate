@@ -6,7 +6,7 @@ import 'package:flutter_intermediate/common/const/colors.dart';
 import 'package:flutter_intermediate/common/const/data.dart';
 import '../../common/layout/default_layout.dart';
 import '../../common/view/root_tab.dart';
-import '../../component/custom_text_form_field.dart';
+import '../../common/component/custom_text_form_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
